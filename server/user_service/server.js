@@ -8,7 +8,7 @@ dotenv.config()
 
 mongoose
 .connect(
-    `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}/?retryWrites=true&w=majority`
+    process.env.MONGODB_URL
 ).then(() => console.log("Database is connected successfully!")).catch((err) => { console.log(err) });
 
 app.use(cors())

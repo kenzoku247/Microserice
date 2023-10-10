@@ -1,4 +1,5 @@
 process.env.NODE_ENV = 'test';
+process.env.UPLOADS_FOLDER_PATH = './test/'
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const app = require('../server')
@@ -140,10 +141,11 @@ describe('Testing order api:' ,() => {
     describe('/upload file', () => {
 
         it('it should upload a file', (done) => {
+            
             chai.request(app)
                 .post('/api_order/upload')
                 .set('Content-Type', 'text/html')
-                .attach('file', fs.readFileSync(`${__dirname}\\test.csv`), 'test\\test.csv')
+                .attach('file', fs.readFileSync(`${__dirname}/test.csv`), 'test/test.csv')
                 .end((err,res) => {
                     res.should.have.status(200)
                     res.body.should.be.a('object')

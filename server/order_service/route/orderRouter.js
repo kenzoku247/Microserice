@@ -5,7 +5,7 @@ const dotenv = require("dotenv")
 dotenv.config()
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, process.env.DEV_UPLOADS_FOLDER_PATH); // Change to uploads when build image
+        cb(null, process.env.UPLOADS_FOLDER_PATH); // Change to uploads when build image
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname); // Use the original filename

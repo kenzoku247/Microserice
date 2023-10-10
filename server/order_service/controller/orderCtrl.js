@@ -51,7 +51,7 @@ class APIfeatures {
 
 const getData = async (orderCode) => {
     try {
-        const pythonData = spawnSync('python', ['python_script/getOrdersData.py', orderCode]);
+        const pythonData = spawnSync('python3', ['python_script/getOrdersData.py', orderCode]);
         const dataToString = pythonData.stdout.toString().trim()
         if (dataToString !== "Error at Order Code!") {
             const dataToJSON = JSON.parse(dataToString)
@@ -64,14 +64,14 @@ const getData = async (orderCode) => {
 
 const getFixedData = async (fileName) => {
     try {
-        const result = spawnSync('python', ['python_script/uploadFileData.py', process.env.DEV_UPLOADS_FOLDER_PATH + fileName])
+        const result = spawnSync('python3', ['python_script/uploadFileData.py', process.env.UPLOADS_FOLDER_PATH + fileName])
         if (result.error) {
             console.log(result.error.message)
             process.exit(1);
         } else {
             const newFileName = fileName.slice(0, -4) + "_fixed.json";
             try {
-                const jsonData = fs.readFileSync(process.env.DEV_UPLOADS_FOLDER_PATH + newFileName, 'utf8');
+                const jsonData = fs.readFileSync(process.env.UPLOADS_FOLDER_PATH + newFileName, 'utf8');
                 const parsedData = JSON.parse(jsonData);
                 return parsedData
 
@@ -177,7 +177,7 @@ const orderCtrl = {
                     return !existingOrderCodes.includes(doc.orderCode);
                 });
 
-                const uncertainData = fs.readFileSync(process.env.DEV_UPLOADS_FOLDER_PATH + originalname.slice(0, -4) + "_uncertain.json", 'utf8');
+                const uncertainData = fs.readFileSync(process.env.UPLOADS_FOLDER_PATH + originalname.slice(0, -4) + "_uncertain.json", 'utf8');
                 const uncertainJSON = JSON.parse(uncertainData)
 
                 const newUncertainJSON = uncertainJSON.filter((doc) => {
@@ -206,15 +206,15 @@ const orderCtrl = {
                     res.json({ msg: "File is uploaded successfully!", success: true })
                 }
 
-                fs.unlink(process.env.DEV_UPLOADS_FOLDER_PATH + originalname, (err) => {
+                fs.unlink(process.env.UPLOADS_FOLDER_PATH + originalname, (err) => {
                     if (err) throw err;
                     console.log(`${originalname} has been deleted`);
                 });
-                fs.unlink(process.env.DEV_UPLOADS_FOLDER_PATH + originalname.slice(0, -4) + "_fixed.json", (err) => {
+                fs.unlink(process.env.UPLOADS_FOLDER_PATH + originalname.slice(0, -4) + "_fixed.json", (err) => {
                     if (err) throw err;
                     console.log(`${originalname.slice(0, -4) + "_fixed.json"} has been deleted`);
                 });
-                fs.unlink(process.env.DEV_UPLOADS_FOLDER_PATH + originalname.slice(0, -4) + "_uncertain.json", (err) => {
+                fs.unlink(process.env.UPLOADS_FOLDER_PATH + originalname.slice(0, -4) + "_uncertain.json", (err) => {
                     if (err) throw err;
                     console.log(`${originalname.slice(0, -4) + "_uncertain.json"} has been deleted`);
                 });
