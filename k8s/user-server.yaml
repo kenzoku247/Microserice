@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-server-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: user-server
+  template:
+    metadata:
+      labels:
+        component: user-server
+    spec:
+      containers:
+        - name: user-server
+          image: kenzoku247/server-user-image:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-cred-secret
+                  key: mongodb-user
+            - name: MONGODB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-cred-secret
+                  key: mongodb-pass
+            - name: MONGODB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-cred-secret
+                  key: mongodb-host
+            - name: ACCESS_TOKEN_SECRET
+              value: "Z?!c6$)',UC>h\\N`U2R2S/dEyr[*tjs3]h){}3%C9TG!6S'>Mg"
+            - name: REFRESH_TOKEN_SECRET
+              value: "X+\\5Hv]2G;H/:-2>jPB&BG9Yj>SNf,jZ63]CU%V{>E@Pjq9?EN)Js4fRt9J4&#6d{Q;K)4hd}{3ueFwbE&sAYnJv`3g(D7)uX2dG"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-server-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: user-server
+  ports:
+    - port: 5000
+      targetPort: 5000
+      name: http

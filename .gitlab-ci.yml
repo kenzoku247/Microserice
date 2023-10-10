@@ -1,0 +1,114 @@
+variables: 
+  IMAGE_TAG: latest 
+  IMAGE_CLIENT_NAME: client-image
+  IMAGE_ORDER_SERVER_NAME: server-order-image
+  IMAGE_USER_SERVER_NAME: server-user-image
+  CONTAINER_NAME: checking-order 
+  GCP_PROJECT_ID: k8s-cluster-400616
+  GCP_ZONE_NAME: asia-southeast1
+stages: 
+  - unit-test 
+  - sonar-scan 
+  - build 
+  - deploy
+
+dependency-install:
+  stage: unit-test
+  script:
+    - echo $GITLAB_RUNNER_PASS | sudo -S apt update
+    - if [[ "$(node -v)" != *"v18"* ]];
+      then 
+        echo $GITLAB_RUNNER_PASS | sudo -S curl -s https://deb.nodesource.com/setup_18.x | sudo bash ;
+        echo $GITLAB_RUNNER_PASS | sudo -S apt install nodejs -y ;
+      fi
+    - echo $GITLAB_RUNNER_PASS | sudo -S npm install --global mocha mocha-junit-reporter -y
+    - echo $GITLAB_RUNNER_PASS | sudo -S npm install --save-dev chai chai-http -y
+    - cd server/order_service; yarn install
+    - echo $GITLAB_RUNNER_PASS | sudo -S apt install python3.11 python3-pip -y
+    - echo $GITLAB_RUNNER_PASS | sudo -S apt install build-essential libssl-dev libffi-dev python3-dev -y
+    - echo $GITLAB_RUNNER_PASS | sudo -S apt install python3-venv -y
+    - python3 -m venv .
+    - cd python_script && pip install -r requirements.txt
+    - cd ../../user_service;  yarn install
+    - echo $GITLAB_RUNNER_PASS | sudo -S apt update
+      && sudo apt install default-jre -y
+      && sudo apt install default-jdk -y
+    - LATEST_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+      && wget https://chromedriver.storage.googleapis.com/$LATEST_VERSION/chromedriver_linux64.zip
+      && unzip chromedriver_linux64.zip
+      && chmod +x chromedriver
+      && echo $GITLAB_RUNNER_PASS | sudo -S mv chromedriver /usr/local/bin/
+      && rm chromedriver_linux64.zip
+    - pwd
+    - cd server/order_service/python_script && wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.13.0/selenium-server-4.13.0.jar
+    - chmod +x selenium-server-4.13.0.jar
+    - if [[ "$(lsof -t -i:4444)" ]]; 
+      then sudo kill -9 `echo $GITLAB_RUNNER_PASS | sudo -S lsof -t -i:4444`; 
+      fi
+
+
+unit-test-order-service:
+  stage: unit-test
+  script:
+    - cd server/order_service/python_script
+    - java -jar selenium-server-4.13.0.jar standalone &
+    - disown
+    - npm run report-test
+  after_script:
+    - sudo kill -9 `echo $GITLAB_RUNNER_PASS | sudo -S lsof -t -i:4444`
+  artifacts:
+    when: always
+    reports:
+      junit: server/order_service/junit-order.xml
+
+sonarqube-check: 
+  stage: sonar-scan 
+  image: 
+    name: sonarsource/sonar-scanner-cli:latest 
+    entrypoint: [""] 
+  variables:    
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  
+    GIT_DEPTH: "0" 
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: 
+    - sonar-scanner
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+
+
+build-job:       
+  stage: build
+  before_script:
+    - echo $REGISTRY_PASS | docker login -u $REGISTRY_USER --password-stdin
+  script:
+    - cd client && docker build -t $IMAGE_CLIENT_NAME:$IMAGE_TAG .
+    - docker image tag $IMAGE_CLIENT_NAME:$IMAGE_TAG $REGISTRY_USER/$IMAGE_CLIENT_NAME:$IMAGE_TAG
+    - docker push $REGISTRY_USER/$IMAGE_CLIENT_NAME:$IMAGE_TAG
+
+    - cd ../server/order_service && docker build -t $IMAGE_ORDER_SERVER_NAME:$IMAGE_TAG .
+    - docker image tag $IMAGE_ORDER_SERVER_NAME:$IMAGE_TAG $REGISTRY_USER/$IMAGE_ORDER_SERVER_NAME:$IMAGE_TAG
+    - docker push $REGISTRY_USER/$IMAGE_ORDER_SERVER_NAME:$IMAGE_TAG
+
+    - cd ../user_service && docker build -t $IMAGE_USER_SERVER_NAME:$IMAGE_TAG .
+    - docker image tag $IMAGE_USER_SERVER_NAME:$IMAGE_TAG $REGISTRY_USER/$IMAGE_USER_SERVER_NAME:$IMAGE_TAG
+    - docker push $REGISTRY_USER/$IMAGE_USER_SERVER_NAME:$IMAGE_TAG
+  after_script:
+    - docker logout
+
+deploy-job:     
+  stage: deploy
+  before_script:
+    - echo "$SERVICE_ACCOUNT_KEY" > key.json
+    - source ~/google-cloud-sdk/path.bash.inc
+    - source ~/google-cloud-sdk/completion.bash.inc
+    - gcloud auth activate-service-account --key-file key.json
+    - gcloud container clusters get-credentials autopilot-cluster-1 --region $GCP_ZONE_NAME --project $GCP_PROJECT_ID
+  script:
+    - kubectl apply -f k8s/mongo-cred-secret.yaml
+    - kubectl apply -f k8s/user-server.yaml && kubectl apply -f k8s/order-server.yaml
+    - kubectl apply -f k8s/client.yaml
+    - kubectl apply -f k8s/ingress-service.yaml

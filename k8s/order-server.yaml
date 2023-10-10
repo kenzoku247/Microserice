@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-server-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: order-server
+  template:
+    metadata:
+      labels:
+        component: order-server
+    spec:
+      containers:
+        - name: order-server
+          image: kenzoku247/server-order-image:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-cred-secret
+                  key: mongodb-user
+            - name: MONGODB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-cred-secret
+                  key: mongodb-pass
+            - name: MONGODB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-cred-secret
+                  key: mongodb-host
+            
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-server-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: order-server
+  ports:
+    - port: 5000
+      targetPort: 5000
+      name: http

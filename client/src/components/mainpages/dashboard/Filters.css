@@ -1,0 +1,138 @@
+.filters {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: 15px 0;
+  gap: .5rem;
+}
+
+.filters_search_and_update {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5rem;
+}
+
+.filters_search {
+  width: 50%;
+  background-color: var(--main-bg-color);
+  display: flex;
+  color: var(--main-bg-color);
+  border-radius: 5rem;
+  align-items: center;
+  box-shadow: var(--box-shadow);
+  padding: 1rem 1.5rem;
+}
+
+.filters_search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: var(--main-bg-color);
+}
+
+.filters_update {
+  background-color: var(--icons-color);
+  padding: 1rem 2rem;
+  border: 1px solid var(--icons-color);
+  border-radius: 2rem;
+  font-size: 1.1rem;
+  color: var(--shadow-light-color); 
+  cursor: pointer;
+  /* transition: all .3s ease-in; */
+  transition: .3s;
+  box-shadow: var(--box-shadow);
+  box-shadow: 0 5px 0 #373f53;
+}
+
+.filters_update:hover{
+  background-color: var(--main-bg-color);
+  border: 1px solid var(--icons-color);
+  color: var(--icons-color);
+}
+
+.filters_update:active{
+  box-shadow: none;
+  transform: translateY(5px);
+}
+
+.filters_box{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--main-bg-color);
+  border-radius: .5rem;
+  box-shadow: var(--box-shadow);
+}
+
+.filters_box_left {
+  display: flex;
+  flex-direction: row;
+  padding: .5rem;
+  gap: 1rem;
+}
+
+.filters_box_right{
+  display: flex;
+  padding: 0.5rem;
+}
+
+.filter {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.filter input, select {
+  border-radius: 5px;
+  padding: 10px;
+  border: none;
+  outline: 1px solid black;
+  cursor: pointer;
+  background-color: var(--main-bg-color);
+}
+
+.status_platform {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 0.5rem;
+}
+
+.filter_platform {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 0.5rem;
+}
+
+.filter_platform_box {
+  display: flex;
+  justify-content: center;
+  outline: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  height: 44px;
+  cursor: pointer;
+}
+
+.filter_platform_box img {
+  width: 40px;
+}
+
+.Sent_active, 
+.Sending_active,
+.Cancel_active,
+.Returned_active,
+.SE_active,
+.JT_active,
+.NV_active,
+.GHN_active,
+.VNP_active,
+.VTP_active {
+  background-color: var(--icons-color);
+  color: var(--main-bg-color);
+}

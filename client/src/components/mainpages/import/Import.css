@@ -1,0 +1,56 @@
+.import {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    padding: 0 1rem;
+}
+
+.upload_type {
+    display: flex;
+    justify-content:space-evenly;
+}
+
+.single_upload{
+    width: 40%;
+    background-color: var(--main-bg-color);
+    display: flex;
+    color: var(--main-bg-color);
+    border-radius: 1rem;
+    align-items: center;
+    box-shadow: var(--box-shadow);
+    padding: 0 1rem;
+    margin-top: .5rem;
+    justify-content: space-between;
+}
+
+.single_upload input{
+    width: 85%;
+    border: none;
+    outline: none;
+    background-color: var(--main-bg-color);
+}
+
+.single_upload_icon{
+    font-size: 3rem;
+    padding: .5rem .8rem;
+    cursor: pointer;
+    color: var(--icons-color);
+}
+
+.multiple_upload{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--main-bg-color);
+    /* color: var(--main-bg-color); */
+    border-radius: 1rem;
+    box-shadow: var(--box-shadow);
+    padding: 1rem;
+}
+
+.multiple_upload input{
+    /* border: none;
+    outline: none;
+    background-color: var(--main-bg-color); */
+}

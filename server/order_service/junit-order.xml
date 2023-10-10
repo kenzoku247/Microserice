@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="35.208" tests="6" failures="2">
+  <testsuite name="Root Suite" timestamp="2023-10-09T15:18:30" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Testing order api:" timestamp="2023-10-09T15:18:30" tests="0" file="C:\Users\Administrator\Desktop\Microservices_project\server\order_service\test\order_api.test.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="/get orders" timestamp="2023-10-09T15:18:30" tests="1" file="C:\Users\Administrator\Desktop\Microservices_project\server\order_service\test\order_api.test.js" time="0.677" failures="0">
+    <testcase name="Testing order api: /get orders it should GET all the orders" time="0.674" classname="it should GET all the orders">
+    </testcase>
+  </testsuite>
+  <testsuite name="/put order" timestamp="2023-10-09T15:18:30" tests="1" file="C:\Users\Administrator\Desktop\Microservices_project\server\order_service\test\order_api.test.js" time="0.157" failures="0">
+    <testcase name="Testing order api: /put order it should update an order" time="0.155" classname="it should update an order">
+    </testcase>
+  </testsuite>
+  <testsuite name="/put orders" timestamp="2023-10-09T15:18:31" tests="1" file="C:\Users\Administrator\Desktop\Microservices_project\server\order_service\test\order_api.test.js" time="24.123" failures="1">
+    <testcase name="Testing order api: /put orders it should update many orders" time="24.104" classname="it should update many orders">
+      <failure message="Timeout of 10000ms exceeded. For async tests and hooks, ensure &quot;done()&quot; is called; if returning a Promise, ensure it resolves. (C:\Users\Administrator\Desktop\Microservices_project\server\order_service\test\order_api.test.js)" type="Error"><![CDATA[Error: Timeout of 10000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (C:\Users\Administrator\Desktop\Microservices_project\server\order_service\test\order_api.test.js)
+    at listOnTimeout (node:internal/timers:569:17)
+    at process.processTimers (node:internal/timers:512:7)]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="/post order" timestamp="2023-10-09T15:18:55" tests="2" file="C:\Users\Administrator\Desktop\Microservices_project\server\order_service\test\order_api.test.js" time="7.675" failures="1">
+    <testcase name="Testing order api: /post order it should post an order" time="7.655" classname="it should post an order">
+      <failure message="expected { Object (_events, _eventsCount, ...) } to have status code 200 but got 500" type="AssertionError"><![CDATA[AssertionError: expected { Object (_events, _eventsCount, ...) } to have status code 200 but got 500
+    at C:\Users\Administrator\Desktop\Microservices_project\server\order_service\test\order_api.test.js:118:37
+    at Request.callback (node_modules\superagent\lib\node\index.js:857:12)
+    at C:\Users\Administrator\Desktop\Microservices_project\server\order_service\node_modules\superagent\lib\node\index.js:1070:18
+    at IncomingMessage.<anonymous> (node_modules\superagent\lib\node\parsers\json.js:21:7)
+    at IncomingMessage.emit (node:events:525:35)
+    at endReadableNT (node:internal/streams/readable:1359:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+
+      + expected - actual
+
+      -500
+      +200
+      ]]></failure>
+    </testcase>
+    <testcase name="Testing order api: /post order it should NOT post an order without orderCode field" time="0.007" classname="it should NOT post an order without orderCode field">
+    </testcase>
+  </testsuite>
+  <testsuite name="/upload file" timestamp="2023-10-09T15:19:02" tests="1" file="C:\Users\Administrator\Desktop\Microservices_project\server\order_service\test\order_api.test.js" time="2.573" failures="0">
+    <testcase name="Testing order api: /upload file it should upload a file" time="2.566" classname="it should upload a file">
+    </testcase>
+  </testsuite>
+</testsuites>

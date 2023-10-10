@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium
+    privileged: true
+    shm_size: '2gb'
+    ports:
+      - 4444:4444
+  order-server:
+    image: kenzoku247/server-order-image:1.0
+    container_name: order-server
+    ports:
+      - 5000:5000
+    volumes:
+      - ./uploads:/usr/src/order-server/uploads
+    env_file:
+      - .env
+    environment:
+      SELE_HOST: selenium
+    depends_on:
+      - selenium
+  user-server:
+    image: kenzoku247/server-user-image:1.0
+    container_name: user-server
+    ports:
+      - 5001:5001
+    env_file:
+      - .env
+    environment:
+      ACCESS_TOKEN_SECRET: Z?!c6$)',UC>h\N`U2R2S/dEyr[*tjs3]h){}3%C9TG!6S'>Mg
+      REFRESH_TOKEN_SECRET: X+\5Hv]2G;H/:-2>jPB&BG9Yj>SNf,jZ63]CU%V{>E@Pjq9?EN)Js4fRt9J4&#6d{Q;K)4hd}{3ueFwbE&sAYnJv`3g(D7)uX2dG
+  client:
+    image: kenzoku247/client-image:1.0
+    container_name: client
+    ports:
+      - 3000:3000
+    volumes:
+      - ./uploads:/usr/src/react-client/uploads
+    environment:
+      REACT_APP_ORDER_HOST: order-server
+      REACT_APP_ORDER_PORT: 5000
+      REACT_APP_USER_HOST: user-server
+      REACT_APP_USER_PORT: 5001
+    depends_on:
+      - user-server
+      - order-server
+      

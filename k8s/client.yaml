@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: web
+  template:
+    metadata:
+      labels:
+        component: web
+    spec:
+      containers:
+        - name: client
+          image: kenzoku247/client-image:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REACT_APP_ORDER_SERVER
+              value: order-server-cluster-ip-service
+            - name: REACT_APP_USER_SERVER
+              value: user-server-cluster-ip-service
+            - name: REACT_APP_PORT_SERVER
+              value: 5000
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: web
+  ports:
+    - port: 80
+      targetPort: 3000
+      name: http

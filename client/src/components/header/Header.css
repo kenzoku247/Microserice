@@ -1,0 +1,39 @@
+.header {
+    min-height: 70px; 
+    width: 100%; 
+    display: flex; 
+    flex-wrap: wrap;
+    align-items:center;
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+    padding: 0 10px ;
+    background-color: #686868;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  opacity: 0.8;
+  width: 100%;
+  height: 70px;
+}
+ul {
+  display: flex;
+  gap: 3rem;
+
+}
+li {
+  list-style-type: none;
+  padding: 10px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+}
+.navbar .logo {
+  font-weight: 686;
+}

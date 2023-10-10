@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+  --icons-color: #4c5773;
+  --icons-light-color: #4c577341;
+  --icons-bg-color: #e2e6e9;
+  --bg-shadow-dark-color: #d3dae745;
+  --shadow-dark-color: #d3dae7;
+  --shadow-light-color: #fff;
+  --main-bg-color: #ecf0f3;
+  
+  --box-shadow: .5rem .5rem .5rem var(--shadow-dark-color), -.5rem -.5rem .5rem var(--shadow-light-color);
+  --box-shadow-2: 0rem 0rem 0rem var(--shadow-dark-color), -.3rem -.3rem 1rem var(--shadow-dark-color)
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: none;
+}
+
+::selection{
+  color: var(--shadow-dark-color);
+  background: var(--icons-color);
+}
+
+::-webkit-scrollbar{
+  width: .5rem;
+  border: 1px solid var(--main-bg-color);
+}
+
+::-webkit-scrollbar-track{
+  border-radius: 0;
+  background-color: var(--main-bg-color);
+}
+
+::-webkit-scrollbar-thumb{
+  border-radius: 2rem;
+  background: var(--icons-color);
+  width: 0.5rem;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  background-color:var(--main-bg-color);
+  color: var(--icons-color);
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+
+@import url("./components/header/Header.css");
+
+@import url("./components/mainpages/dashboard/Dashboard.css");
+
+@import url("./components//mainpages/dashboard/Filters.css");
+
+@import url("./components/mainpages/import/Import.css");
+
+@import url("./components/mainpages/returned/Returned.css");
+
+@import url("./components/mainpages/statistical/Statistical.css");
+
+@import url("./components/mainpages/about/About.css");
+
+@import url("./components/utils/orderModal/OrderModal.css");
+
+@import url("./components/auth/login.css")
